@@ -23,8 +23,8 @@ type Version struct {
 	metadata   string
 }
 
-// NewVersion returns a new version
-func NewVersion(v string) (*Version, error) {
+// New returns a new version
+func New(v string) (*Version, error) {
 	if v == "" {
 		return &Version{}, nil
 	}

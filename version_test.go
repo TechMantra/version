@@ -8,9 +8,8 @@ import (
 )
 
 func TestNewVersion(t *testing.T) {
-
 	t.Run("Empty version", func(t *testing.T) {
-		v, err := version.NewVersion("")
+		v, err := version.New("")
 		if err != nil {
 			t.Error(err)
 		}
@@ -20,7 +19,7 @@ func TestNewVersion(t *testing.T) {
 	})
 
 	t.Run("Parse basic 1.2.3 version", func(t *testing.T) {
-		v, err := version.NewVersion("1.2.3")
+		v, err := version.New("1.2.3")
 		if err != nil {
 			t.Error(err)
 		}
@@ -31,22 +30,22 @@ func TestNewVersion(t *testing.T) {
 	})
 
 	t.Run("Handles invalid version input", func(t *testing.T) {
-		_, err := version.NewVersion("42")
+		_, err := version.New("42")
 		if err == nil {
 			t.Error("Should be an invalid version number")
 		}
 
-		_, err = version.NewVersion("a.b.c")
+		_, err = version.New("a.b.c")
 		if err == nil {
 			t.Error("Should be an invalid version number")
 		}
 
-		_, err = version.NewVersion("1.b.c")
+		_, err = version.New("1.b.c")
 		if err == nil {
 			t.Error("Should be an invalid version number")
 		}
 
-		_, err = version.NewVersion("1.2.c")
+		_, err = version.New("1.2.c")
 		if err == nil {
 			t.Error("Should be an invalid version number")
 		}
@@ -54,7 +53,7 @@ func TestNewVersion(t *testing.T) {
 }
 
 func TestBump(t *testing.T) {
-	v, err := version.NewVersion("")
+	v, err := version.New("")
 	if err != nil {
 		t.Error(err)
 	}
@@ -65,7 +64,7 @@ func TestBump(t *testing.T) {
 }
 
 func TestBumpWithChanges(t *testing.T) {
-	v, err := version.NewVersion("")
+	v, err := version.New("")
 	if err != nil {
 		t.Error(err)
 	}
@@ -76,7 +75,7 @@ func TestBumpWithChanges(t *testing.T) {
 }
 
 func TestBumpWithBreakingChanges(t *testing.T) {
-	v, err := version.NewVersion("")
+	v, err := version.New("")
 	if err != nil {
 		t.Error(err)
 	}
@@ -87,7 +86,7 @@ func TestBumpWithBreakingChanges(t *testing.T) {
 }
 
 func TestAddMetadata(t *testing.T) {
-	v, err := version.NewVersion("")
+	v, err := version.New("")
 	if err != nil {
 		t.Error(err)
 	}
@@ -99,7 +98,7 @@ func TestAddMetadata(t *testing.T) {
 }
 
 func TestAlpha(t *testing.T) {
-	v, err := version.NewVersion("")
+	v, err := version.New("")
 	if err != nil {
 		t.Error(err)
 	}
@@ -111,7 +110,7 @@ func TestAlpha(t *testing.T) {
 }
 
 func TestBeta(t *testing.T) {
-	v, err := version.NewVersion("")
+	v, err := version.New("")
 	if err != nil {
 		t.Error(err)
 	}
@@ -124,7 +123,7 @@ func TestBeta(t *testing.T) {
 
 func TestString(t *testing.T) {
 	t.Run("Basic", func(t *testing.T) {
-		v, err := version.NewVersion("")
+		v, err := version.New("")
 		if err != nil {
 			t.Error(err)
 		}
@@ -133,7 +132,7 @@ func TestString(t *testing.T) {
 		}
 	})
 	t.Run("Pre-release and metadata", func(t *testing.T) {
-		v, err := version.NewVersion("")
+		v, err := version.New("")
 		if err != nil {
 			t.Error(err)
 		}
