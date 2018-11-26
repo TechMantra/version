@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"techmantra.io/version"
+	"glorieux.io/version"
 )
 
 func TestNewVersion(t *testing.T) {
