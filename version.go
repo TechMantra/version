@@ -2,11 +2,10 @@
 package version
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
-
-	"github.com/pkg/errors"
 )
 
 var (
@@ -34,15 +33,15 @@ func New(v string) (*Version, error) {
 	}
 	Major, err := strconv.Atoi(s[0])
 	if err != nil {
-		return nil, errors.Wrap(err, "Can't parse Major version number")
+		return nil, fmt.Errorf("Can't parse Major version number. %w", err)
 	}
 	Minor, err := strconv.Atoi(s[1])
 	if err != nil {
-		return nil, errors.Wrap(err, "Can't parse Minor version number")
+		return nil, fmt.Errorf("Can't parse Minor version number. %w", err)
 	}
 	Patch, err := strconv.Atoi(s[2])
 	if err != nil {
-		return nil, errors.Wrap(err, "Can't parse Patch version number")
+		return nil, fmt.Errorf("Can't parse Patch version number. %w", err)
 	}
 	return &Version{
 		Major,
