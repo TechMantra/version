@@ -2,6 +2,7 @@ package version_test
 
 import (
 	"fmt"
+	"sort"
 	"testing"
 
 	"pkg.glorieux.io/version"
@@ -143,4 +144,68 @@ func TestString(t *testing.T) {
 			t.Errorf("Should return 0.0.0-beta+test got %s", sv)
 		}
 	})
+}
+
+func TestBeforeAfter(t *testing.T) {
+	type test struct {
+		versionA string
+		versionB string
+		expected bool
+	}
+
+	cases := []test{
+		{"0.1.2", "0.1.3", false},
+		{"0.1.2", "1.2.3", false},
+		{"5.4.3", "1.2.4", true},
+		{"3.1.2", "1.2.3", true},
+		{"1.1.2", "1.2.3", false},
+	}
+
+	for _, c := range cases {
+		versionA, _ := version.New(c.versionA)
+		versionB, _ := version.New(c.versionB)
+
+		if versionA.Before(versionB) != !c.expected {
+			t.Errorf("Expected %s to be before %s", versionA, versionB)
+		}
+
+		if versionA.After(versionB) != c.expected {
+			t.Errorf("Expected %s to be after %s", versionA, versionB)
+		}
+	}
+}
+
+func TestSort(t *testing.T) {
+	versions, err := version.Versions("5.4.3", "1.2.4", "1.3.3", "0.1.2")
+	if err != nil {
+		t.Error(err)
+	}
+	t.Run("Ascending", func(t *testing.T) {
+		sort.Sort(version.Ascending(versions))
+		expected, err := version.Versions("0.1.2", "1.2.4", "1.3.3", "5.4.3")
+		if err != nil {
+			t.Error(err)
+		}
+
+		for i, _ := range expected {
+			if !versions[i].Equal(expected[i]) {
+				t.Errorf("Expected %s got %s", expected[i].String(), versions[i].String())
+			}
+		}
+	})
+
+	t.Run("Descending", func(t *testing.T) {
+		sort.Sort(version.Descending(versions))
+		expected, err := version.Versions("5.4.3", "1.3.3", "1.2.4", "0.1.2")
+		if err != nil {
+			t.Error(err)
+		}
+
+		for i, _ := range expected {
+			if !versions[i].Equal(expected[i]) {
+				t.Errorf("Expected %s got %s", expected[i].String(), versions[i].String())
+			}
+		}
+	})
+
 }

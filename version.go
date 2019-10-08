@@ -98,13 +98,10 @@ func (v *Version) String() string {
 
 // After returns whether or not a version is after another
 func (v *Version) After(b *Version) bool {
-	if v.major > b.major {
-		return true
+	if v.Equal(b) {
+		return false
 	}
-	if v.minor > b.minor {
-		return true
-	}
-	if v.patch > b.patch {
+	if v.major > b.major || v.minor > b.minor || v.patch > v.patch {
 		return true
 	}
 	return false
@@ -112,7 +109,13 @@ func (v *Version) After(b *Version) bool {
 
 // Before returns whether or not a version is before an other
 func (v *Version) Before(b *Version) bool {
-	return !v.After(b)
+	if v.Equal(b) {
+		return false
+	}
+	if v.major > b.major || v.minor > b.minor || v.patch > v.patch {
+		return false
+	}
+	return true
 }
 
 // Equal returns whether or not a version is equal to another
@@ -128,3 +131,32 @@ func (v *Version) Equal(b *Version) bool {
 	}
 	return true
 }
+
+// Versions parses multiple versions at once
+func Versions(stringVersions ...string) ([]*Version, error) {
+	versions := []*Version{}
+	for _, v := range stringVersions {
+		version, err := New(v)
+		if err != nil {
+			return nil, err
+		}
+		versions = append(versions, version)
+	}
+	return versions, nil
+}
+
+// Ascending is used to sort version in ascending order
+// by calling sort.Sort(Ascending(versions))
+type Ascending []*Version
+
+func (a Ascending) Len() int           { return len(a) }
+func (a Ascending) Less(i, j int) bool { return a[i].Before(a[j]) }
+func (a Ascending) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+
+// Descending is used to sort version in descending order
+// by calling sort.Sort(Descending(versions))
+type Descending []*Version
+
+func (d Descending) Len() int           { return len(d) }
+func (d Descending) Less(i, j int) bool { return d[i].After(d[j]) }
+func (d Descending) Swap(i, j int)      { d[i], d[j] = d[j], d[i] }
