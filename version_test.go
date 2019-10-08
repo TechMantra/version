@@ -156,6 +156,7 @@ func TestBeforeAfter(t *testing.T) {
 	cases := []test{
 		{"0.1.2", "0.1.3", false},
 		{"0.1.2", "1.2.3", false},
+		{"0.2.0", "1.1.0", false},
 		{"5.4.3", "1.2.4", true},
 		{"3.1.2", "1.2.3", true},
 		{"1.1.2", "1.2.3", false},
@@ -165,12 +166,11 @@ func TestBeforeAfter(t *testing.T) {
 		versionA, _ := version.New(c.versionA)
 		versionB, _ := version.New(c.versionB)
 
-		if versionA.Before(versionB) != !c.expected {
-			t.Errorf("Expected %s to be before %s", versionA, versionB)
-		}
-
 		if versionA.After(versionB) != c.expected {
 			t.Errorf("Expected %s to be after %s", versionA, versionB)
+		}
+		if versionA.Before(versionB) != !c.expected {
+			t.Errorf("Expected %s to be before %s", versionA, versionB)
 		}
 	}
 }

@@ -101,10 +101,19 @@ func (v *Version) After(b *Version) bool {
 	if v.Equal(b) {
 		return false
 	}
-	if v.major > b.major || v.minor > b.minor || v.patch > v.patch {
+	switch {
+	case v.major < b.major:
+		return false
+	case v.major > b.major:
 		return true
+	case v.minor < b.minor:
+		return false
+	case v.minor > b.minor:
+		return true
+	case v.patch < b.patch:
+		return false
 	}
-	return false
+	return true
 }
 
 // Before returns whether or not a version is before an other
@@ -112,7 +121,16 @@ func (v *Version) Before(b *Version) bool {
 	if v.Equal(b) {
 		return false
 	}
-	if v.major > b.major || v.minor > b.minor || v.patch > v.patch {
+	switch {
+	case v.major > b.major:
+		return false
+	case v.major < b.major:
+		return true
+	case v.minor > b.minor:
+		return false
+	case v.minor < b.minor:
+		return true
+	case v.patch > b.patch:
 		return false
 	}
 	return true
